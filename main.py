@@ -1,4 +1,3 @@
-
 from flask import Flask, request
 import requests
 import os
@@ -14,11 +13,14 @@ def send_telegram_message(text):
         "chat_id": CHAT_ID,
         "text": text
     }
-    requests.post(url, data=payload)
+    response = requests.post(url, data=payload)
+    print(f"Sending to Telegram: {text}, Status: {response.status_code}, Response: {response.text}")
+    return response
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.json
+    print(f"Received webhook data: {data}")
     message = data.get("value1", "（沒有接收到訊息內容）")
     send_telegram_message(message)
     return "OK", 200
@@ -28,4 +30,5 @@ def index():
     return "Webhook server is running!"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.getenv("PORT", 10000))  # Render 會提供 PORT，預設 10000
+    app.run(host="0.0.0.0", port=port)
