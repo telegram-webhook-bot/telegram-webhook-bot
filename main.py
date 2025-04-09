@@ -9,10 +9,7 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 def send_telegram_message(text):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": CHAT_ID,
-        "text": text
-    }
+    payload = {"chat_id": CHAT_ID, "text": text}
     response = requests.post(url, data=payload)
     print(f"Sending to Telegram: {text}, Status: {response.status_code}, Response: {response.text}")
     return response
@@ -30,5 +27,5 @@ def index():
     return "Webhook server is running!"
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 10000))  # Render 會提供 PORT，預設 10000
+    port = int(os.getenv("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
